@@ -7,9 +7,17 @@ import styles from '../styles/Home.module.scss';
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  const scanRef = useRef<HTMLCanvasElement | null>(null);
+
   useEffect(() => {
+    if (!scanRef?.current || !videoRef.current) {
+      return;
+    }
+
+    videoRef.current?.addEventListener('play', () => requestAnimationFrame(streamFeed), {once: true});
+
     init();
-  }, [videoRef]);
+  }, [videoRef, scanRef]);
 
   const init = async () => {
     if (!videoRef?.current) {
@@ -28,6 +36,21 @@ const Home = () => {
     await video.play();
   };
 
+  const streamFeed = () => {
+    if (!scanRef?.current || !videoRef.current) {
+      return;
+    }
+
+    if (videoRef.current.paused || videoRef.current.ended) {
+      return;
+    }
+
+    const context = scanRef.current.getContext('2d');
+    context?.drawImage(videoRef.current, 0, 0, 210, 297);
+
+    requestAnimationFrame(streamFeed);
+  };
+
   return (
     <>
       <Head>
@@ -36,8 +59,11 @@ const Home = () => {
       </Head>
 
       <main className={styles.main}>
-        Hello World
         <video ref={videoRef}></video>
+
+        <div className={styles.overlay}></div>
+
+        <canvas ref={scanRef} className={styles.scan} width={210} height={297}></canvas>
       </main>
     </>
   );
