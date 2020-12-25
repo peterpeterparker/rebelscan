@@ -1,5 +1,5 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.scss'
+import Head from 'next/head';
+import styles from '../styles/Home.module.scss';
 
 const Home = () => {
   return (
@@ -9,11 +9,9 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
-          Hello World
-      </main>
+      <main className={styles.main}>Hello World</main>
     </>
-  )
-}
+  );
+};
 
 export default Home;
