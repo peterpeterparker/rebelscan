@@ -12,17 +12,15 @@ const Home = () => {
   const videoSize = useSize();
 
   useEffect(() => {
-    if (!scanRef?.current || !videoRef.current) {
+    if (!scanRef?.current || !videoRef.current || !videoSize) {
       return;
     }
 
-    videoRef.current?.addEventListener('play', () => requestAnimationFrame(streamFeed), {once: true});
-
     init();
-  }, [videoRef, scanRef]);
+  }, [videoRef, scanRef, videoSize]);
 
   const init = async () => {
-    if (!videoRef?.current) {
+    if (!videoRef?.current || !videoSize) {
       return;
     }
 
@@ -30,12 +28,19 @@ const Home = () => {
       return;
     }
 
-    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({audio: false, video: true});
+    // TODO: handle resize
+    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({audio: false, video: {width: videoSize.width, height: videoSize.height}});
 
     const video: HTMLVideoElement = (videoRef.current as unknown) as HTMLVideoElement;
 
+    if (video.srcObject) {
+      return;
+    }
+
     video.srcObject = stream;
     await video.play();
+
+    requestAnimationFrame(streamFeed);
   };
 
   const streamFeed = () => {
@@ -47,8 +52,23 @@ const Home = () => {
       return;
     }
 
+    if (!videoSize) {
+      return;
+    }
+
+    const y = videoSize.height * 0.6;
+    const x = (y * 210) / 297;
+
+    const deltaX = (videoSize.width - x) / 2;
+    const deltaY = (videoSize.height - y) / 2;
+
+    scanRef.current.width = 2100;
+    scanRef.current.height = 2970;
+
+    console.log(deltaX, deltaY, x, y);
+
     const context = scanRef.current.getContext('2d');
-    context?.drawImage(videoRef.current, 0, 0, 210, 297);
+    context?.drawImage(videoRef.current, deltaX, deltaY, x, y, 0, 0, 2100, 2970);
 
     requestAnimationFrame(streamFeed);
   };
@@ -59,7 +79,7 @@ const Home = () => {
 
       <div className={styles.overlay}></div>
 
-      <canvas ref={scanRef} className={styles.scan} width={210} height={297}></canvas>
+      <canvas ref={scanRef} className={styles.scan}></canvas>
     </main>
   );
 };

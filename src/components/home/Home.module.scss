@@ -4,11 +4,6 @@
 }
 
 .video {
-  width: auto;
-  height: auto;
-  min-width: 100%;
-  min-height: 100%;
-
   position: absolute;
   top: 50%;
   left: 50%;
@@ -28,6 +23,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
+
+  width: calc(60vh * 210 / 297);
+  height: 60vh;
 
   transform: translate(-50%, -50%);
 }
