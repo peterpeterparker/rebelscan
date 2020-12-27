@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {isIOS} from '@deckdeckgo/utils';
+import {isIOS, debounce} from '@deckdeckgo/utils';
 
 interface Size {
   width: number;
@@ -25,9 +25,9 @@ export const useSize = (): Size | undefined => {
   const [size, setSize] = useState<Size | undefined>(undefined);
 
   useEffect(() => {
-    const initSize = () => {
+    const initSize = debounce(() => {
       setSize(screenSize());
-    };
+    }, 250);
 
     window.addEventListener('resize', initSize);
 
