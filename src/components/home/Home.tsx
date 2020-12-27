@@ -1,13 +1,15 @@
 import {useEffect, useRef} from 'react';
 
-import Head from 'next/head';
-
 import styles from './Home.module.scss';
+
+import {useSize} from '../../hooks/size.hook';
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const scanRef = useRef<HTMLCanvasElement | null>(null);
+
+  const videoSize = useSize();
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef.current) {
@@ -28,7 +30,7 @@ const Home = () => {
       return;
     }
 
-    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({audio: false, video: {width: 1280, height: 720}});
+    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({audio: false, video: true});
 
     const video: HTMLVideoElement = (videoRef.current as unknown) as HTMLVideoElement;
 
@@ -52,20 +54,13 @@ const Home = () => {
   };
 
   return (
-    <>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <main className={styles.main}>
+      <video className={styles.video} ref={videoRef} width={videoSize?.width} height={videoSize?.height}></video>
 
-      <main className={styles.main}>
-        <video ref={videoRef}></video>
+      <div className={styles.overlay}></div>
 
-        <div className={styles.overlay}></div>
-
-        <canvas ref={scanRef} className={styles.scan} width={210} height={297}></canvas>
-      </main>
-    </>
+      <canvas ref={scanRef} className={styles.scan} width={210} height={297}></canvas>
+    </main>
   );
 };
 
