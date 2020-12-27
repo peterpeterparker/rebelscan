@@ -2,12 +2,12 @@ import {useEffect, useState} from 'react';
 
 import {isIOS, debounce} from '@deckdeckgo/utils';
 
-interface Size {
+export interface ScreenSize {
   width: number;
   height: number;
 }
 
-const screenSize = (): Size => {
+const screenSize = (): ScreenSize => {
   if (isIOS()) {
     return {
       width: screen.width > window.innerWidth ? screen.width : window.innerWidth,
@@ -21,8 +21,8 @@ const screenSize = (): Size => {
   }
 };
 
-export const useSize = (): Size | undefined => {
-  const [size, setSize] = useState<Size | undefined>(undefined);
+export const useScreenSize = (): ScreenSize | undefined => {
+  const [size, setSize] = useState<ScreenSize | undefined>(undefined);
 
   useEffect(() => {
     const initSize = debounce(() => {

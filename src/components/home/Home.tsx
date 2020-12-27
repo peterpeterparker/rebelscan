@@ -1,26 +1,38 @@
-import {useEffect, useRef} from 'react';
+import {CSSProperties, useEffect, useRef, useState} from 'react';
 
 import styles from './Home.module.scss';
 
-import {useSize} from '../../hooks/size.hook';
+import {ScreenSize, useScreenSize} from '../../hooks/size.hook';
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const scanRef = useRef<HTMLCanvasElement | null>(null);
 
-  const videoSize = useSize();
+  const screenSize = useScreenSize();
+
+  let videoSize: ScreenSize | undefined = undefined;
+
+  const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (!scanRef?.current || !videoRef.current || !videoSize) {
+    if (!scanRef?.current || !videoRef.current || !canvasHeight) {
       return;
     }
 
     init();
-  }, [videoRef, scanRef, videoSize]);
+  }, [videoRef, scanRef, canvasHeight]);
+
+  useEffect(() => {
+    if (!screenSize) {
+      return;
+    }
+
+    setCanvasHeight(((screenSize.height * 210) / 297 > screenSize.width ? (screenSize.width / 210) * 297 : screenSize.height) * 0.8);
+  }, [screenSize]);
 
   const init = async () => {
-    if (!videoRef?.current || !videoSize) {
+    if (!videoRef?.current) {
       return;
     }
 
@@ -28,8 +40,22 @@ const Home = () => {
       return;
     }
 
-    // TODO: handle resize
-    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({audio: false, video: {width: videoSize.width, height: videoSize.height}});
+    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        width: {ideal: 720},
+        height: {ideal: 1280},
+      },
+    });
+
+    if (!stream.getVideoTracks()[0]?.getSettings().width || !stream.getVideoTracks()[0]?.getSettings().height) {
+      return;
+    }
+
+    videoSize = {
+      width: stream.getVideoTracks()[0].getSettings().width as number,
+      height: stream.getVideoTracks()[0].getSettings().height as number,
+    };
 
     const video: HTMLVideoElement = (videoRef.current as unknown) as HTMLVideoElement;
 
@@ -38,6 +64,10 @@ const Home = () => {
     }
 
     video.srcObject = stream;
+
+    video.width = videoSize.width;
+    video.height = videoSize.height;
+
     await video.play();
 
     requestAnimationFrame(streamFeed);
@@ -52,11 +82,11 @@ const Home = () => {
       return;
     }
 
-    if (!videoSize) {
+    if (!videoSize || !canvasHeight) {
       return;
     }
 
-    const y = videoSize.height * 0.6;
+    const y = canvasHeight;
     const x = (y * 210) / 297;
 
     const deltaX = (videoSize.width - x) / 2;
@@ -65,21 +95,21 @@ const Home = () => {
     scanRef.current.width = 2100;
     scanRef.current.height = 2970;
 
-    console.log(deltaX, deltaY, x, y);
-
     const context = scanRef.current.getContext('2d');
     context?.drawImage(videoRef.current, deltaX, deltaY, x, y, 0, 0, 2100, 2970);
 
     requestAnimationFrame(streamFeed);
   };
 
+  const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
+
   return (
     <main className={styles.main}>
-      <video className={styles.video} ref={videoRef} width={videoSize?.width} height={videoSize?.height}></video>
+      <video className={styles.video} ref={videoRef}></video>
 
       <div className={styles.overlay}></div>
 
-      <canvas ref={scanRef} className={styles.scan}></canvas>
+      <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>
     </main>
   );
 };
