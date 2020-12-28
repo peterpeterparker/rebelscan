@@ -3,6 +3,7 @@ import {CSSProperties, useEffect, useRef, useState} from 'react';
 import styles from './Home.module.scss';
 
 import {ScreenSize, useScreenSize} from '../../hooks/size.hook';
+import {isMobile} from '@deckdeckgo/utils';
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -11,25 +12,24 @@ const Home = () => {
 
   const screenSize = useScreenSize();
 
-  let videoSize: ScreenSize | undefined = undefined;
-
+  const [videoSize, setVideoSize] = useState<ScreenSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (!scanRef?.current || !videoRef.current || !canvasHeight) {
+    if (!scanRef?.current || !videoRef.current || !screenSize) {
       return;
     }
 
     init();
-  }, [videoRef, scanRef, canvasHeight]);
+  }, [videoRef, scanRef, screenSize]);
 
   useEffect(() => {
-    if (!screenSize) {
+    if (!videoSize || !canvasHeight) {
       return;
     }
 
-    setCanvasHeight(((screenSize.height * 210) / 297 > screenSize.width ? (screenSize.width / 210) * 297 : screenSize.height) * 0.8);
-  }, [screenSize]);
+    requestAnimationFrame(streamFeed);
+  }, [canvasHeight, videoSize]);
 
   const init = async () => {
     if (!videoRef?.current) {
@@ -43,19 +43,23 @@ const Home = () => {
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
-        facingMode: {exact: 'environment'},
         width: {ideal: 720},
         height: {ideal: 1280},
+        ...(isMobile() && {facingMode: {exact: 'environment'}}),
       },
     });
 
-    if (!stream.getVideoTracks()[0]?.getSettings().width || !stream.getVideoTracks()[0]?.getSettings().height) {
+    const [track] = stream.getVideoTracks();
+
+    if (!track) {
       return;
     }
+    const capabilities = track.getCapabilities();
+    const settings = track.getSettings();
 
-    videoSize = {
-      width: stream.getVideoTracks()[0].getSettings().width as number,
-      height: stream.getVideoTracks()[0].getSettings().height as number,
+    const videoSize = {
+      width: settings.width as number,
+      height: settings.height as number,
     };
 
     const video: HTMLVideoElement = (videoRef.current as unknown) as HTMLVideoElement;
@@ -71,7 +75,22 @@ const Home = () => {
 
     await video.play();
 
-    requestAnimationFrame(streamFeed);
+    setVideoSize(videoSize);
+
+    initCanvasHeight(videoSize);
+  };
+
+  const initCanvasHeight = (videoSize: ScreenSize) => {
+    if (!screenSize) {
+      return;
+    }
+
+    const height = Math.max(screenSize.height, videoSize.height);
+    const width = (height * 210) / 297;
+
+    const canvasIdealHeight = (width > screenSize.width ? (screenSize.width / 210) * 297 : height) - 64;
+
+    setCanvasHeight(canvasIdealHeight > height ? height : canvasIdealHeight);
   };
 
   const streamFeed = () => {
