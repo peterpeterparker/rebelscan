@@ -2,39 +2,27 @@ import {CSSProperties, useEffect, useRef, useState} from 'react';
 
 import styles from './Home.module.scss';
 
-import {ScreenSize, useScreenSize} from '../../hooks/size.hook';
+import {InfoSize} from '../../hooks/size.hook';
 
 import {isMobile} from '@deckdeckgo/utils';
-
-interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
-  zoom: {min: number; max: number; step: number | string};
-}
-
-interface ExtendedMediaTrackSettings extends MediaTrackSettings {
-  zoom: number;
-}
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const scanRef = useRef<HTMLCanvasElement | null>(null);
 
-  const screenSize = useScreenSize();
+  const containerRef = useRef<HTMLElement | null>(null);
 
-  const [videoSize, setVideoSize] = useState<ScreenSize | undefined>(undefined);
+  const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
-  const [track, setTrack] = useState<MediaStreamTrack | undefined>(undefined);
-  const [capabilities, setCapabilities] = useState<ExtendedMediaTrackCapabilities | undefined>(undefined);
-  const [settings, setSettings] = useState<ExtendedMediaTrackSettings | undefined>(undefined);
-
   useEffect(() => {
-    if (!scanRef?.current || !videoRef.current || !screenSize) {
+    if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
       return;
     }
 
     init();
-  }, [videoRef, scanRef, screenSize]);
+  }, [videoRef, scanRef, containerRef.current]);
 
   useEffect(() => {
     if (!videoSize || !canvasHeight) {
@@ -61,16 +49,12 @@ const Home = () => {
     });
 
     const [track] = stream.getVideoTracks();
-    setTrack(track);
 
     if (!track) {
       return;
     }
 
-    setCapabilities(track.getCapabilities() as ExtendedMediaTrackCapabilities);
-
     const settings = track.getSettings();
-    setSettings(settings as ExtendedMediaTrackSettings);
 
     const videoSize = {
       width: settings.width as number,
@@ -95,15 +79,16 @@ const Home = () => {
     initCanvasHeight(videoSize);
   };
 
-  const initCanvasHeight = (videoSize: ScreenSize) => {
-    if (!screenSize) {
+  const initCanvasHeight = (videoSize: InfoSize) => {
+    if (!containerRef?.current) {
       return;
     }
 
-    const height = Math.max(screenSize.height, videoSize.height);
+    const height = Math.min(containerRef?.current.offsetHeight, videoSize.height);
+
     const width = (height * 210) / 297;
 
-    const canvasIdealHeight = (width > screenSize.width ? (screenSize.width / 210) * 297 : height) - 64;
+    const canvasIdealHeight = (width > containerRef?.current.scrollWidth ? (containerRef?.current.scrollWidth / 210) * 297 : height) - 64;
 
     setCanvasHeight(canvasIdealHeight > height ? height : canvasIdealHeight);
   };
@@ -138,39 +123,21 @@ const Home = () => {
 
   const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
 
-  const zoom = ($event: any) => {
-    track?.applyConstraints({advanced: [{zoom: $event.target.value} as MediaTrackConstraintSet]});
-  };
-
   return (
     <main className={styles.main}>
-      <video className={styles.video} ref={videoRef}></video>
+      <article ref={containerRef} className={styles.container}>
+        <video className={styles.video} ref={videoRef}></video>
 
-      <div className={styles.overlay}></div>
+        <div className={styles.overlay}></div>
 
-      <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>
+        <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>
+      </article>
 
-      {renderControl()}
+      <nav className={styles.nav}>
+        <button aria-label="Capture" className={styles.action}></button>
+      </nav>
     </main>
   );
-
-  function renderControl() {
-    if (!settings || !capabilities) {
-      return undefined;
-    }
-
-    return (
-      <input
-        className={styles.zoom}
-        onInput={($event: any) => zoom($event)}
-        type="range"
-        min={capabilities.zoom?.min}
-        max={capabilities.zoom?.max}
-        step={capabilities.zoom?.step}
-        value={settings?.zoom}
-      />
-    );
-  }
 };
 
 export default Home;

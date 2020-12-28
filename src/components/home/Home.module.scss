@@ -1,6 +1,16 @@
 .main {
   width: 100%;
   height: 100vh;
+
+  display: grid;
+  grid-template-rows: auto 128px;
+
+  background: rgba(var(--color-dark-rgb), 0.84);
+}
+
+.container {
+  position: relative;
+  width: 100%;
 }
 
 .video {
@@ -11,12 +21,12 @@
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--color-dark-rgb), 0.84);
 }
 
 .scan {
@@ -28,11 +38,31 @@
   height: var(--canvas-height);
 
   transform: translate(-50%, -50%);
+
+  border-radius: 2px;
+  box-shadow: 0 0 16px rgba(var(--color-dark-rgb), 0.84);
 }
 
-.zoom {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 3;
+}
+
+.action {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+
+  margin-bottom: 16px;
 }
