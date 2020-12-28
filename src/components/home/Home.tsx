@@ -3,7 +3,16 @@ import {CSSProperties, useEffect, useRef, useState} from 'react';
 import styles from './Home.module.scss';
 
 import {ScreenSize, useScreenSize} from '../../hooks/size.hook';
+
 import {isMobile} from '@deckdeckgo/utils';
+
+interface ExtendedMediaTrackCapabilities extends MediaTrackCapabilities {
+  zoom: {min: number; max: number; step: number | string};
+}
+
+interface ExtendedMediaTrackSettings extends MediaTrackSettings {
+  zoom: number;
+}
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -14,6 +23,10 @@ const Home = () => {
 
   const [videoSize, setVideoSize] = useState<ScreenSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
+
+  const [track, setTrack] = useState<MediaStreamTrack | undefined>(undefined);
+  const [capabilities, setCapabilities] = useState<ExtendedMediaTrackCapabilities | undefined>(undefined);
+  const [settings, setSettings] = useState<ExtendedMediaTrackSettings | undefined>(undefined);
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef.current || !screenSize) {
@@ -50,12 +63,16 @@ const Home = () => {
     });
 
     const [track] = stream.getVideoTracks();
+    setTrack(track);
 
     if (!track) {
       return;
     }
-    const capabilities = track.getCapabilities();
+
+    setCapabilities(track.getCapabilities() as ExtendedMediaTrackCapabilities);
+
     const settings = track.getSettings();
+    setSettings(settings as ExtendedMediaTrackSettings);
 
     const videoSize = {
       width: settings.width as number,
@@ -123,6 +140,10 @@ const Home = () => {
 
   const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
 
+  const zoom = ($event: any) => {
+    track?.applyConstraints({advanced: [{zoom: $event.target.value} as MediaTrackConstraintSet]});
+  };
+
   return (
     <main className={styles.main}>
       <video className={styles.video} ref={videoRef}></video>
@@ -130,8 +151,28 @@ const Home = () => {
       <div className={styles.overlay}></div>
 
       <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>
+
+      {renderControl()}
     </main>
   );
+
+  function renderControl() {
+    if (!settings || !capabilities) {
+      return undefined;
+    }
+
+    return (
+      <input
+        className={styles.zoom}
+        onInput={($event: any) => zoom($event)}
+        type="range"
+        min={capabilities.zoom?.min}
+        max={capabilities.zoom?.max}
+        step={capabilities.zoom?.step}
+        value={settings?.zoom}
+      />
+    );
+  }
 };
 
 export default Home;
