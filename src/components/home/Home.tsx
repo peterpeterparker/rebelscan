@@ -56,8 +56,6 @@ const Home = () => {
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
-        width: {ideal: 720},
-        height: {ideal: 1280},
         ...(isMobile() && {facingMode: {exact: 'environment'}}),
       },
     });
