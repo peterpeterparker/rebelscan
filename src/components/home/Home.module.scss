@@ -54,7 +54,7 @@
   position: relative;
 
   &:global(.scan button.share) {
-    left: 64%;
+    transform: translate(calc(-50% + 128px), -50%);
 
     width: 32px;
     height: 32px;
@@ -65,7 +65,7 @@
   }
 
   &:global(.share button.scan) {
-    left: 36%;
+    transform: translate(calc(-50% - 128px), -50%);
 
     width: 32px;
     height: 32px;
