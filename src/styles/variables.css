@@ -10,4 +10,10 @@
 
   --color-dark: #000501;
   --color-dark-rgb: 0, 5, 1;
+
+  --color-medium: #6e6d6f;
+  --color-medium-rgb: 110, 109, 111;
+
+  --color-light: #f4f5f8;
+  --color-light-rgb: 244, 245, 248;
 }

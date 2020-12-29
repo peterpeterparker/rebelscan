@@ -1,5 +1,7 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
 
+import Image from 'next/image';
+
 import styles from './Home.module.scss';
 
 import {InfoSize} from '../../hooks/size.hook';
@@ -16,6 +18,8 @@ const Home = () => {
   const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
+  const [status, setStatus] = useState<'scan' | 'share'>('scan');
+
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
       return;
@@ -29,7 +33,7 @@ const Home = () => {
       return;
     }
 
-    requestAnimationFrame(streamFeed);
+    scan();
   }, [canvasHeight, videoSize]);
 
   const init = async () => {
@@ -118,7 +122,29 @@ const Home = () => {
     const context = scanRef.current.getContext('2d');
     context?.drawImage(videoRef.current, deltaX, deltaY, x, y, 0, 0, 2100, 2970);
 
+    scan();
+  };
+
+  const scan = () => {
     requestAnimationFrame(streamFeed);
+  };
+
+  const capture = async () => {
+    const video: HTMLVideoElement = (videoRef.current as unknown) as HTMLVideoElement;
+
+    if (status === 'scan') {
+      await video.pause();
+      setStatus('share');
+      return;
+    }
+
+    await video.play();
+    scan();
+    setStatus('scan');
+  };
+
+  const share = async () => {
+    // TODO share
   };
 
   const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
@@ -133,11 +159,23 @@ const Home = () => {
         <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>
       </article>
 
-      <nav className={styles.nav}>
-        <button aria-label="Capture" className={styles.action}></button>
-      </nav>
+      {renderAction()}
     </main>
   );
+
+  function renderAction() {
+    return (
+      <nav className={`${styles.nav} ${status}`}>
+        <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture}>
+          <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
+        </button>
+
+        <button aria-label="Share" className={`${styles.action} share`} onClick={share}>
+          <Image src="/icons/share-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
+        </button>
+      </nav>
+    );
+  }
 };
 
 export default Home;
