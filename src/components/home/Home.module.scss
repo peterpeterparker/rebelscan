@@ -48,6 +48,13 @@
   box-shadow: 0 0 16px rgba(var(--color-dark-rgb), 0.84);
 }
 
+.filter {
+  &:global(::part(canvas)) {
+    width: 100%;
+    height: 100%;
+  }
+}
+
 .nav {
   z-index: 3;
 

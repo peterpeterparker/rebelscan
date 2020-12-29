@@ -8,6 +8,11 @@ import {InfoSize} from '../../hooks/size.hook';
 
 import {isMobile} from '@deckdeckgo/utils';
 
+import {defineCustomElements} from 'web-photo-filter/dist/loader';
+defineCustomElements();
+
+import {WebPhotoFilter} from 'web-photo-filter-react/dist';
+
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -19,6 +24,8 @@ const Home = () => {
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
   const [status, setStatus] = useState<'scan' | 'share'>('scan');
+
+  const [captureSrc, setCaptureSrc] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
@@ -134,13 +141,17 @@ const Home = () => {
 
     if (status === 'scan') {
       await video.pause();
+
       setStatus('share');
+      setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
       return;
     }
 
     await video.play();
     scan();
+
     setStatus('scan');
+    setCaptureSrc(undefined);
   };
 
   const share = async () => {
@@ -156,12 +167,20 @@ const Home = () => {
 
         <div className={styles.overlay}></div>
 
-        <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>
+        {renderCanvas()}
       </article>
 
       {renderAction()}
     </main>
   );
+
+  function renderCanvas() {
+    if (captureSrc) {
+      return <WebPhotoFilter src={captureSrc} filter="greyscale" className={`${styles.scan} ${styles.filter}`} style={canvasStyle} />;
+    }
+
+    return <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>;
+  }
 
   function renderAction() {
     return (
