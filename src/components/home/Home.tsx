@@ -65,13 +65,14 @@ const Home = () => {
       return;
     }
 
-    const capabilities = track.getCapabilities();
-
-    if ((capabilities as any).torch) {
-      await track.applyConstraints({
-        advanced: [{torch: true} as any],
-      });
-    }
+    // TODO: flash
+    // const capabilities = track.getCapabilities();
+    //
+    // if ((capabilities as any).torch) {
+    //   await track.applyConstraints({
+    //     advanced: [{torch: true} as any],
+    //   });
+    // }
 
     const settings = track.getSettings();
 
@@ -184,7 +185,7 @@ const Home = () => {
 
   function renderCanvas() {
     if (captureSrc) {
-      return <WebPhotoFilter src={captureSrc} filter="greyscale" className={`${styles.scan} ${styles.filter}`} style={canvasStyle} />;
+      return <WebPhotoFilter src={captureSrc} filter="desaturate,saturation,contrast" className={`${styles.scan} ${styles.filter}`} style={canvasStyle} />;
     }
 
     return <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>;
