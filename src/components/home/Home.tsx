@@ -65,6 +65,14 @@ const Home = () => {
       return;
     }
 
+    const capabilities = track.getCapabilities();
+
+    if ((capabilities as any).torch) {
+      await track.applyConstraints({
+        advanced: [{torch: true} as any],
+      });
+    }
+
     const settings = track.getSettings();
 
     const videoSize = {
