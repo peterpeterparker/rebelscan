@@ -7,8 +7,7 @@ export const shareImage = async (src: string) => {
     await navigator.share({
       // @ts-ignore
       files: [file],
-      title: 'Pictures',
-      text: 'Our Pictures.',
+      title: 'Rebel Scan',
       url: 'https://rebelscan.com',
     });
   } catch (err) {
