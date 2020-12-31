@@ -20,9 +20,10 @@ export const sharePdf = async (src: string) => {
 
   await navigator.share({
     // @ts-ignore
-    files: [file],
+    // files: [file],
     title: 'Pictures',
     text: 'Our Pictures.',
+    url: 'https://rebelscan.com',
   });
 };
 
