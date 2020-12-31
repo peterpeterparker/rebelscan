@@ -6,7 +6,7 @@ import styles from './Home.module.scss';
 
 import {InfoSize} from '../../hooks/size.hook';
 
-import {savePdf, sharePdf} from '../../utils/pdf.utils';
+import {getPdfFile, savePdf} from '../../utils/pdf.utils';
 
 import {isMobile} from '@deckdeckgo/utils';
 
@@ -176,10 +176,12 @@ const Home = () => {
       return;
     }
 
+    const pdf: File = getPdfFile(captureDest);
+
     // await sharePdf(captureDest);
     await navigator.share({
       // @ts-ignore
-      // files: [file],
+      files: [pdf],
       title: 'Pictures',
       text: 'Our Pictures.',
       url: 'https://rebelscan.com',

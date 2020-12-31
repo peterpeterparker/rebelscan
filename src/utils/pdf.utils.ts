@@ -14,17 +14,9 @@ export const savePdf = async (src: string) => {
   download('rebelscan.pdf', blob);
 };
 
-export const sharePdf = async (src: string) => {
+export const getPdfFile = (src: string): File => {
   const blob: Blob = convertToPdfBlob(src);
-  const file = new File([blob], 'rebelscan.pdf', {type: 'application/pdf', lastModified: Date.now()});
-
-  await navigator.share({
-    // @ts-ignore
-    // files: [file],
-    title: 'Pictures',
-    text: 'Our Pictures.',
-    url: 'https://rebelscan.com',
-  });
+  return new File([blob], 'rebelscan.pdf', {type: 'application/pdf', lastModified: Date.now()});
 };
 
 const convertToPdfBlob = (src: string): Blob => {
