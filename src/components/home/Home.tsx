@@ -176,20 +176,22 @@ const Home = () => {
       return;
     }
 
-    const pdf: File = getPdfFile(captureDest);
+    // const pdf: File = getPdfFile(captureDest);
+    // const file = new File([captureDest], 'rebelscan.pdf', {type: 'application/pdf', lastModified: Date.now()});
 
-    // await sharePdf(captureDest);
-    setTimeout(
-      async () =>
-        await navigator.share({
-          // @ts-ignore
-          files: [pdf],
-          title: 'Pictures',
-          text: 'Our Pictures.',
-          url: 'https://rebelscan.com',
-        }),
-      0
-    );
+    const res = await fetch(captureDest);
+    const blob = await res.blob();
+    const file = new File([blob], 'rebelscan.pdf', {type: 'image/png', lastModified: Date.now()});
+
+    console.log(file);
+
+    await navigator.share({
+      // @ts-ignore
+      files: [file],
+      title: 'Pictures',
+      text: 'Our Pictures.',
+      url: 'https://rebelscan.com',
+    });
   };
 
   const download = async () => {
