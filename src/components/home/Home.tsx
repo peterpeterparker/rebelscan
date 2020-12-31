@@ -6,13 +6,14 @@ import styles from './Home.module.scss';
 
 import {InfoSize} from '../../hooks/size.hook';
 
+import {savePdf, sharePdf} from '../../utils/pdf.utils';
+
 import {isMobile} from '@deckdeckgo/utils';
 
 import {defineCustomElements} from 'web-photo-filter/dist/loader';
 defineCustomElements();
 
 import {WebPhotoFilter} from 'web-photo-filter-react/dist';
-import {savePdf} from '../../utils/pdf.utils';
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -171,7 +172,11 @@ const Home = () => {
   }, [captureSrc]);
 
   const share = async () => {
-    // TODO share
+    if (!captureDest) {
+      return;
+    }
+
+    await sharePdf(captureDest);
   };
 
   const download = async () => {
