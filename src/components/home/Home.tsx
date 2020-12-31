@@ -23,7 +23,7 @@ const Home = () => {
   const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
-  const [status, setStatus] = useState<'scan' | 'share'>('scan');
+  const [status, setStatus] = useState<'scan' | 'share' | undefined>(undefined);
 
   const [captureSrc, setCaptureSrc] = useState<string | undefined>(undefined);
 
@@ -151,7 +151,6 @@ const Home = () => {
     if (status === 'scan') {
       await video.pause();
 
-      setStatus('share');
       setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
       return;
     }
@@ -159,9 +158,12 @@ const Home = () => {
     await video.play();
     scan();
 
-    setStatus('scan');
     setCaptureSrc(undefined);
   };
+
+  useEffect(() => {
+    setTimeout(() => setStatus(status === 'scan' ? 'share' : 'scan'), 150);
+  }, [captureSrc]);
 
   const share = async () => {
     // TODO share
@@ -193,7 +195,7 @@ const Home = () => {
 
   function renderAction() {
     return (
-      <nav className={`${styles.nav} ${status}`}>
+      <nav className={`${styles.nav} ${status ? status : 'scan'}`}>
         <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture}>
           <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
