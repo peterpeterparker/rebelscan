@@ -179,13 +179,17 @@ const Home = () => {
     const pdf: File = getPdfFile(captureDest);
 
     // await sharePdf(captureDest);
-    await navigator.share({
-      // @ts-ignore
-      files: [pdf],
-      title: 'Pictures',
-      text: 'Our Pictures.',
-      url: 'https://rebelscan.com',
-    });
+    setTimeout(
+      async () =>
+        await navigator.share({
+          // @ts-ignore
+          files: [pdf],
+          title: 'Pictures',
+          text: 'Our Pictures.',
+          url: 'https://rebelscan.com',
+        }),
+      0
+    );
   };
 
   const download = async () => {
