@@ -181,7 +181,7 @@ const Home = () => {
 
     const res = await fetch(captureDest);
     const blob = await res.blob();
-    const file = new File([blob], 'rebelscan.pdf', {type: 'image/png', lastModified: Date.now()});
+    const file = new File([blob], 'rebelscan.png', {type: 'image/png', lastModified: Date.now()});
 
     console.log(file);
 
