@@ -176,7 +176,14 @@ const Home = () => {
       return;
     }
 
-    await sharePdf(captureDest);
+    // await sharePdf(captureDest);
+    await navigator.share({
+      // @ts-ignore
+      // files: [file],
+      title: 'Pictures',
+      text: 'Our Pictures.',
+      url: 'https://rebelscan.com',
+    });
   };
 
   const download = async () => {
