@@ -16,10 +16,11 @@ export const savePdf = async (src: string) => {
 
 export const sharePdf = async (src: string) => {
   const blob: Blob = convertToPdfBlob(src);
+  const file = new File([blob], 'rebelscan.pdf', {type: 'application/pdf', lastModified: Date.now()});
 
   await navigator.share({
     // @ts-ignore
-    files: [blob],
+    files: [file],
     title: 'Pictures',
     text: 'Our Pictures.',
   });
