@@ -12,6 +12,7 @@ import {defineCustomElements} from 'web-photo-filter/dist/loader';
 defineCustomElements();
 
 import {WebPhotoFilter} from 'web-photo-filter-react/dist';
+import {savePdf} from '../../utils/pdf.utils';
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -26,6 +27,10 @@ const Home = () => {
   const [status, setStatus] = useState<'scan' | 'share' | undefined>(undefined);
 
   const [captureSrc, setCaptureSrc] = useState<string | undefined>(undefined);
+  const [captureDest, setCaptureDest] = useState<string | undefined>(undefined);
+
+  // @ts-ignore
+  const shareSupported: boolean = navigator.canShare;
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
@@ -169,6 +174,23 @@ const Home = () => {
     // TODO share
   };
 
+  const download = async () => {
+    if (!captureDest) {
+      return;
+    }
+
+    await savePdf(captureDest);
+  };
+
+  const imageLoaded = ($event: {detail: {webGLDetected: boolean; result: HTMLCanvasElement | HTMLImageElement}}) => {
+    if (!$event.detail.webGLDetected) {
+      setCaptureDest(undefined);
+      return;
+    }
+
+    setCaptureDest(($event.detail.result as HTMLCanvasElement).toDataURL('image/png'));
+  };
+
   const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
 
   return (
@@ -187,7 +209,15 @@ const Home = () => {
 
   function renderCanvas() {
     if (captureSrc) {
-      return <WebPhotoFilter src={captureSrc} filter="desaturate,saturation,contrast" className={`${styles.scan} ${styles.filter}`} style={canvasStyle} />;
+      return (
+        <WebPhotoFilter
+          onFilterLoad={($event: any) => imageLoaded($event)}
+          src={captureSrc}
+          filter="desaturate,saturation,contrast"
+          className={`${styles.scan} ${styles.filter}`}
+          style={canvasStyle}
+        />
+      );
     }
 
     return <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>;
@@ -200,10 +230,24 @@ const Home = () => {
           <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
 
+        {renderShareOrDownload()}
+      </nav>
+    );
+  }
+
+  function renderShareOrDownload() {
+    if (shareSupported) {
+      return (
         <button aria-label="Share" className={`${styles.action} share`} onClick={share}>
           <Image src="/icons/share-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
-      </nav>
+      );
+    }
+
+    return (
+      <button aria-label="Download" className={`${styles.action} share`} onClick={download}>
+        <Image src="/icons/download-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
+      </button>
     );
   }
 };
