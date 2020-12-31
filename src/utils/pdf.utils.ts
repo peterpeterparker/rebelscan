@@ -14,11 +14,6 @@ export const savePdf = async (src: string) => {
   download('rebelscan.pdf', blob);
 };
 
-export const getPdfFile = (src: string): File => {
-  const blob: Blob = convertToPdfBlob(src);
-  return new File([blob], 'rebelscan.pdf', {type: 'application/pdf', lastModified: Date.now()});
-};
-
 const convertToPdfBlob = (src: string): Blob => {
   const doc = new jsPDF();
 
