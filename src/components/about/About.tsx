@@ -1,6 +1,7 @@
 import React, {forwardRef, Ref, useImperativeHandle, useState} from 'react';
 
 import styles from './About.module.scss';
+import Image from 'next/image';
 
 export interface AboutHandles {
   display(): void;
@@ -21,6 +22,10 @@ export const About = forwardRef<AboutHandles>((props, ref) => {
 
   return (
     <div role="button" tabIndex={0} className={`${styles.menu} ${open ? `${styles.open}` : ''}`} onClick={() => hide()} onKeyDown={() => hide()}>
+      <button aria-label="Close" className={styles.close}>
+        <Image src="/icons/close-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
+      </button>
+
       <h1 className={styles.title}>A little scanner app made with the web, you rebel scum!</h1>
 
       <div className={styles.social}>

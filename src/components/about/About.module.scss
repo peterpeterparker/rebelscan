@@ -35,10 +35,11 @@
 .title {
   max-width: 720px;
   text-shadow: 2px 3px var(--color-secondary);
+  margin-top: 1.45rem;
 }
 
 .social {
-  padding: 32px;
+  padding: 0.75rem;
 
   img {
     filter: drop-shadow(1px 2px 1px var(--color-secondary));
@@ -46,10 +47,16 @@
 }
 
 .made {
-  padding-top: 16px;
+  padding-top: 1.45rem;
 
   a {
     display: inline-block;
     text-shadow: 1px 2px var(--color-secondary);
   }
+}
+
+.close {
+  position: absolute;
+  top: 1.45rem;
+  left: 0.75rem;
 }
