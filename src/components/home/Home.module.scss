@@ -77,10 +77,6 @@
 
     width: 32px;
     height: 32px;
-
-    background: white;
-
-    background: linear-gradient(135deg, var(--color-medium), var(--color-light));
   }
 
   &:global(.share button.scan) {
@@ -88,10 +84,6 @@
 
     width: 32px;
     height: 32px;
-
-    background: white;
-
-    background: linear-gradient(135deg, var(--color-medium), var(--color-light));
   }
 }
 
@@ -119,4 +111,9 @@
   transform: translate(-50%, -50%);
 
   transition: all 0.25s ease-in;
+
+  &:disabled {
+    background: linear-gradient(135deg, var(--color-medium), var(--color-light));
+    cursor: initial;
+  }
 }

@@ -26,7 +26,7 @@ const Home = () => {
   const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
-  const [status, setStatus] = useState<'scan' | 'share' | undefined>(undefined);
+  const [status, setStatus] = useState<'scan' | 'share'>('scan');
 
   const [captureSrc, setCaptureSrc] = useState<string | undefined>(undefined);
   const [captureDest, setCaptureDest] = useState<string | undefined>(undefined);
@@ -242,14 +242,14 @@ const Home = () => {
   function renderShareOrDownload() {
     if (shareSupported) {
       return (
-        <button aria-label="Share" className={`${styles.action} share`} onClick={share}>
+        <button aria-label="Share" className={`${styles.action} share`} onClick={share} disabled={status === 'scan'}>
           <Image src="/icons/share-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
       );
     }
 
     return (
-      <button aria-label="Download" className={`${styles.action} share`} onClick={download}>
+      <button aria-label="Download" className={`${styles.action} share`} onClick={download} disabled={status === 'scan'}>
         <Image src="/icons/download-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
       </button>
     );
