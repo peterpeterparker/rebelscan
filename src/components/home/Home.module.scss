@@ -48,6 +48,16 @@
 
   border-radius: 2px;
   box-shadow: 0 0 16px rgba(var(--color-dark-rgb), 0.84);
+
+  visibility: visible;
+  opacity: 1;
+
+  transition: opacity 0.5s ease-in-out;
+
+  &:global(.hidden) {
+    visibility: hidden;
+    opacity: 0;
+  }
 }
 
 .filter {

@@ -197,8 +197,6 @@ const Home = () => {
     setCaptureDest(($event.detail.result as HTMLCanvasElement).toDataURL('image/png'));
   };
 
-  const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
-
   return (
     <main className={styles.main}>
       <article ref={containerRef} className={styles.container}>
@@ -214,19 +212,20 @@ const Home = () => {
   );
 
   function renderCanvas() {
-    if (captureSrc) {
-      return (
+    const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
+
+    return (
+      <>
         <WebPhotoFilter
           onFilterLoad={($event: any) => imageLoaded($event)}
           src={captureSrc}
           filter="desaturate,saturation,contrast"
-          className={`${styles.scan} ${styles.filter}`}
+          className={`${styles.scan} ${styles.filter} ${status === 'scan' ? 'hidden' : 'show'}`}
           style={canvasStyle}
         />
-      );
-    }
-
-    return <canvas ref={scanRef} className={styles.scan} style={canvasStyle}></canvas>;
+        <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
+      </>
+    );
   }
 
   function renderAction() {
