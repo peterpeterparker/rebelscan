@@ -4,14 +4,28 @@
   position: relative;
 
   &:global(.scan button.share) {
-    transform: translate(calc(-50% + 128px), -50%);
+    transform: translate(calc(-50% + 80px), -50%);
 
     width: 32px;
     height: 32px;
   }
 
   &:global(.share button.scan) {
-    transform: translate(calc(-50% - 128px), -50%);
+    transform: translate(calc(-50% - 80px), -50%);
+
+    width: 32px;
+    height: 32px;
+  }
+
+  &:global(.scan button.about) {
+    transform: translate(calc(-50% - 80px), -50%);
+
+    width: 32px;
+    height: 32px;
+  }
+
+  &:global(.share button.about) {
+    transform: translate(calc(-50% - 132px), -50%);
 
     width: 32px;
     height: 32px;
