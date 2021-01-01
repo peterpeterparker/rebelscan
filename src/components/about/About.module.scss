@@ -31,3 +31,25 @@
     pointer-events: all;
   }
 }
+
+.title {
+  max-width: 720px;
+  text-shadow: 2px 3px var(--color-secondary);
+}
+
+.social {
+  padding: 32px;
+
+  img {
+    filter: drop-shadow(1px 2px 1px var(--color-secondary));
+  }
+}
+
+.made {
+  padding-top: 16px;
+
+  a {
+    display: inline-block;
+    text-shadow: 1px 2px var(--color-secondary);
+  }
+}

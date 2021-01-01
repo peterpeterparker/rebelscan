@@ -6,7 +6,7 @@ const Header = () => {
       <title>Rebel Scan</title>
 
       <meta property="og:site_name" content="Rebel Scan" />
-      <meta property="og:title" content="It is just little scanner app made with the web, you rebel scum!" />
+      <meta property="og:title" content="A little scanner app made with the web, you rebel scum!" />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://rebelscan.com" />
       <meta property="og:image" content="https://rebelscan.com/meta/rebelscan-meta.png" />
@@ -15,14 +15,14 @@ const Header = () => {
       <meta name="twitter:site" content="@daviddalbusco" />
       <meta name="twitter:creator" content="@daviddalbusco" />
       <meta name="twitter:title" content="Rebel Scan" />
-      <meta name="twitter:description" content="It is just little scanner app made with the web, you rebel scum!" />
+      <meta name="twitter:description" content="A little scanner app made with the web, you rebel scum!" />
       <meta name="twitter:image:src" content="https://rebelscan.com/meta/rebelscan-meta.png" />
       <meta name="twitter:card" content="summary_large_image" />
 
       <meta name="author" content="David Dal Busco" />
 
-      <meta name="description" content="It is just little scanner app made with the web, you rebel scum!" />
-      <meta property="og:description" content="It is just little scanner app made with the web, you rebel scum!" />
+      <meta name="description" content="A little scanner app made with the web, you rebel scum!" />
+      <meta property="og:description" content="A little scanner app made with the web, you rebel scum!" />
 
       <link rel="canonical" href="https://rebelscan.com" />
 

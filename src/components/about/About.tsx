@@ -21,7 +21,28 @@ export const About = forwardRef<AboutHandles>((props, ref) => {
 
   return (
     <div role="button" tabIndex={0} className={`${styles.menu} ${open ? `${styles.open}` : ''}`} onClick={() => hide()} onKeyDown={() => hide()}>
-      <h1>It is just little scanner app made with the web, you rebel scum!</h1>
+      <h1 className={styles.title}>A little scanner app made with the web, you rebel scum!</h1>
+
+      <div className={styles.social}>
+        <a
+          onClick={($event) => $event.stopPropagation()}
+          href="https://twitter.com/intent/tweet?url=https%3A%2F%2Frebelscan.com&text=A%20little%20scanner%20app%20made%20by%20%40daviddalbusco%20with%20the%20web%2C%20you%20rebel%20scum!"
+          rel="noopener norefferer"
+          aria-label="Twitter">
+          <img loading="lazy" src="/icons/logo-twitter.svg" aria-hidden="true" alt="" style={{width: '4rem', padding: '0.45rem'}} />
+        </a>
+
+        <a onClick={($event) => $event.stopPropagation()} href="https://github.com/peterpeterparker/rebelscan" rel="noopener noreferrer" aria-label="GitHub">
+          <img loading="lazy" src="/icons/logo-github.svg" aria-hidden="true" alt="" style={{width: '4rem', padding: '0.45rem'}} />
+        </a>
+      </div>
+
+      <h2 className={styles.made}>
+        Developed by{' '}
+        <a onClick={($event) => $event.stopPropagation()} href="https://daviddalbusco.com" rel="noopener noreferrer" aria-label="David Dal Busco">
+          David Dal Busco
+        </a>
+      </h2>
     </div>
   );
 });
