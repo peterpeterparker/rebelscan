@@ -1,6 +1,11 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
 
-import Image from 'next/image';
+import {isMobile} from '@deckdeckgo/utils';
+
+import {defineCustomElements} from 'web-photo-filter/dist/loader';
+defineCustomElements();
+
+import {WebPhotoFilter} from 'web-photo-filter-react/dist';
 
 import styles from './Home.module.scss';
 
@@ -9,12 +14,7 @@ import {InfoSize} from '../../hooks/size.hook';
 import {savePdf} from '../../utils/pdf.utils';
 import {shareImage} from '../../utils/image.utils';
 
-import {isMobile} from '@deckdeckgo/utils';
-
-import {defineCustomElements} from 'web-photo-filter/dist/loader';
-defineCustomElements();
-
-import {WebPhotoFilter} from 'web-photo-filter-react/dist';
+import Toolbar from '../toolbar/Toolbar';
 
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -30,9 +30,6 @@ const Home = () => {
 
   const [captureSrc, setCaptureSrc] = useState<string | undefined>(undefined);
   const [captureDest, setCaptureDest] = useState<string | undefined>(undefined);
-
-  // @ts-ignore
-  const shareSupported: boolean = navigator.canShare;
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
@@ -206,7 +203,7 @@ const Home = () => {
         {renderCanvas()}
       </article>
 
-      {renderAction()}
+      <Toolbar status={status} download={download} capture={capture} share={share}></Toolbar>
     </main>
   );
 
@@ -224,34 +221,6 @@ const Home = () => {
         />
         <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
       </>
-    );
-  }
-
-  function renderAction() {
-    return (
-      <nav className={`${styles.nav} ${status ? status : 'scan'}`}>
-        <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture}>
-          <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
-        </button>
-
-        {renderShareOrDownload()}
-      </nav>
-    );
-  }
-
-  function renderShareOrDownload() {
-    if (shareSupported) {
-      return (
-        <button aria-label="Share" className={`${styles.action} share`} onClick={share} disabled={status === 'scan'}>
-          <Image src="/icons/share-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
-        </button>
-      );
-    }
-
-    return (
-      <button aria-label="Download" className={`${styles.action} share`} onClick={download} disabled={status === 'scan'}>
-        <Image src="/icons/download-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
-      </button>
     );
   }
 };
