@@ -216,10 +216,12 @@ const Home = () => {
           onFilterLoad={($event: any) => imageLoaded($event)}
           src={captureSrc}
           filter="desaturate,saturation,contrast"
-          className={`${styles.scan} ${styles.filter} ${status === 'scan' ? 'hidden' : 'show'}`}
+          className={`${styles.scan} ${styles.filter} ${status === 'scan' || canvasHeight === undefined ? 'hidden' : 'show'}`}
           style={canvasStyle}
         />
-        <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
+        <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' || canvasHeight === undefined ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
+
+        {canvasHeight === undefined ? <h1 className={styles.loading}>Loading...</h1> : undefined}
       </>
     );
   }

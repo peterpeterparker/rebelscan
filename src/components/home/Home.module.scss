@@ -67,3 +67,13 @@
     border-radius: 4px;
   }
 }
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  color: var(--color-tertiary);
+  text-shadow: 2px 3px rgba(var(--color-dark-rgb), 0.4);
+}
