@@ -166,11 +166,8 @@ const Home = () => {
     scan();
 
     setCaptureSrc(undefined);
+    setStatus('scan');
   };
-
-  useEffect(() => {
-    setTimeout(() => setStatus(status === 'scan' ? 'share' : 'scan'), 150);
-  }, [captureSrc]);
 
   const share = async () => {
     if (!captureDest) {
@@ -191,10 +188,12 @@ const Home = () => {
   const imageLoaded = ($event: {detail: {webGLDetected: boolean; result: HTMLCanvasElement | HTMLImageElement}}) => {
     if (!$event.detail.webGLDetected) {
       setCaptureDest(undefined);
+      setStatus('scan');
       return;
     }
 
     setCaptureDest(($event.detail.result as HTMLCanvasElement).toDataURL('image/png'));
+    setStatus('share');
   };
 
   return (
