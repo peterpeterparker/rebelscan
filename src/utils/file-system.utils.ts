@@ -1,7 +1,11 @@
 export const saveFilesystem = async (content: string | BufferSource | Blob) => {
-  const fileHandle: FileSystemFileHandle = await getNewFileHandle();
+  try {
+    const fileHandle: FileSystemFileHandle = await getNewFileHandle();
 
-  await writeFile(fileHandle, content);
+    await writeFile(fileHandle, content);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 function getNewFileHandle(): Promise<FileSystemFileHandle> {
