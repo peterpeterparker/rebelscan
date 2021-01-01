@@ -12,7 +12,7 @@
   display: grid;
   grid-template-rows: auto 128px;
 
-  background: rgba(var(--color-dark-rgb), 0.84);
+  background: rgba(var(--color-tertiary-rgb), 0.84);
 }
 
 .container {
@@ -33,7 +33,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(var(--color-dark-rgb), 0.84);
+  background: rgba(var(--color-tertiary-rgb), 0.84);
 }
 
 .scan {
@@ -46,8 +46,8 @@
 
   transform: translate(-50%, -50%);
 
-  border-radius: 2px;
-  box-shadow: 0 0 16px rgba(var(--color-dark-rgb), 0.84);
+  border-radius: 4px;
+  box-shadow: 2px 2px 8px rgba(var(--color-dark-rgb), 0.84);
 
   visibility: visible;
   opacity: 1;
@@ -64,5 +64,6 @@
   &:global(::part(canvas)) {
     width: 100%;
     height: 100%;
+    border-radius: 4px;
   }
 }

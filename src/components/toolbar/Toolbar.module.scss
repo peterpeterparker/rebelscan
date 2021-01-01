@@ -4,31 +4,31 @@
   position: relative;
 
   &:global(.scan button.share) {
-    transform: translate(calc(-50% + 80px), -50%);
+    transform: translate(calc(-50% + 88px), -50%);
 
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
   }
 
   &:global(.share button.scan) {
-    transform: translate(calc(-50% - 80px), -50%);
+    transform: translate(calc(-50% - 84px), -50%);
 
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
   }
 
   &:global(.scan button.about) {
-    transform: translate(calc(-50% - 80px), -50%);
+    transform: translate(calc(-50% - 88px), -50%);
 
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
   }
 
   &:global(.share button.about) {
-    transform: translate(calc(-50% - 132px), -50%);
+    transform: translate(calc(-50% - 148px), -50%);
 
-    width: 32px;
-    height: 32px;
+    width: 48px;
+    height: 48px;
   }
 }
 
@@ -44,7 +44,7 @@
   outline: 0;
   cursor: pointer;
 
-  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 2px 2px 8px rgba(var(--color-dark-rgb), 0.84), -2px -2px 8px var(--color-tertiary);
 
   display: flex;
   justify-content: center;
@@ -60,5 +60,10 @@
   &:disabled {
     background: linear-gradient(135deg, var(--color-medium), var(--color-light));
     cursor: initial;
+  }
+
+  &:active {
+    background: linear-gradient(135deg, var(--color-medium), var(--color-light));
+    box-shadow: 2px 2px 8px var(--color-secondary), -2px -2px 8px var(--color-tertiary);
   }
 }
