@@ -69,6 +69,8 @@ const Home = () => {
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
+        width: {ideal: 1080},
+        height: {ideal: 1920},
         ...(isMobile() && {facingMode: {exact: 'environment'}}),
       },
     });
@@ -89,6 +91,21 @@ const Home = () => {
     // }
 
     console.log('getCapabilities', track.getCapabilities());
+
+    const capabilities = track.getCapabilities();
+    if ((capabilities as any).focusDistance) {
+      console.log('apply focus', (capabilities as any).focusDistance.max);
+
+      await track.applyConstraints({
+        advanced: [
+          {
+            focusMode: 'manual',
+            focusDistance: (capabilities as any).focusDistance.max,
+            iso: 500,
+          } as any,
+        ],
+      });
+    }
 
     const settings = track.getSettings();
 
