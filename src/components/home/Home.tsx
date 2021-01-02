@@ -35,6 +35,7 @@ const Home = () => {
   const screenSize = useScreenSize();
 
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
+  const canvasPadding: number = 64;
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
@@ -59,7 +60,7 @@ const Home = () => {
   }, [videoSize]);
 
   useEffect(() => {
-    setCanvasHeight(containerRef?.current?.offsetHeight);
+    setCanvasHeight(containerRef?.current?.offsetHeight ? containerRef.current.offsetHeight - canvasPadding : undefined);
   }, [screenSize]);
 
   const init = async () => {
@@ -97,18 +98,18 @@ const Home = () => {
 
     console.log('getCapabilities', track.getCapabilities());
 
-    const capabilities = track.getCapabilities();
-    if ((capabilities as any).iso) {
-      console.log('apply iso', (capabilities as any).focusDistance.max);
-
-      await track.applyConstraints({
-        advanced: [
-          {
-            iso: 500,
-          } as any,
-        ],
-      });
-    }
+    // const capabilities = track.getCapabilities();
+    // if ((capabilities as any).iso) {
+    //   console.log('apply iso', (capabilities as any).focusDistance.max);
+    //
+    //   await track.applyConstraints({
+    //     advanced: [
+    //       {
+    //         iso: 500,
+    //       } as any,
+    //     ],
+    //   });
+    // }
 
     const settings = track.getSettings();
 
@@ -148,7 +149,7 @@ const Home = () => {
       return;
     }
 
-    const y = videoSize.height;
+    const y = videoSize.height - canvasPadding;
     const x = (y * 210) / 297;
 
     const deltaX = (videoSize.width - x) / 2;
