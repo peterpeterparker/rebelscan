@@ -88,6 +88,13 @@ const Home = () => {
 
     console.log('getCapabilities', track.getCapabilities());
 
+    const capabilities = track.getCapabilities();
+    if ((capabilities as any).focusDistance) {
+      await track.applyConstraints({
+        advanced: [{focusDistance: (capabilities as any).focusDistance.max} as any],
+      });
+    }
+
     const settings = track.getSettings();
 
     console.log('settings', settings);
