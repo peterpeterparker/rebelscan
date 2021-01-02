@@ -97,8 +97,8 @@ const Home = () => {
       console.log('apply focus', (capabilities as any).focusDistance.max);
 
       await track.applyConstraints({
-        advanced: [{focusDistance: (capabilities as any).focusDistance.max} as any],
-      });
+        focusDistance: (capabilities as any).focusDistance.max,
+      } as any);
     }
 
     const settings = track.getSettings();
