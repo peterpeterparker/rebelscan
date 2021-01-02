@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://rebelscan.com"><img src="assets/logo.svg" alt="Rebel Scan logo" height="160"></a>
+  <a href="https://rebelscan.com"><img src="assets/logo.png" alt="Rebel Scan logo" height="160"></a>
 
   <br/>
 
