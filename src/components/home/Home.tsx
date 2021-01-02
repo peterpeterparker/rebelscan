@@ -94,6 +94,8 @@ const Home = () => {
 
     const capabilities = track.getCapabilities();
     if ((capabilities as any).focusDistance) {
+      console.log('apply focus', (capabilities as any).focusDistance.max);
+
       await track.applyConstraints({
         advanced: [{focusDistance: (capabilities as any).focusDistance.max} as any],
       });
