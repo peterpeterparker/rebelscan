@@ -23,7 +23,7 @@ const Home = () => {
 
   const containerRef = useRef<HTMLElement | null>(null);
 
-  const [videoLoaded, setVideoLoaded] = useState<boolean>(true);
+  const [videoLoaded, setVideoLoaded] = useState<boolean>(false);
 
   const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
@@ -35,6 +35,10 @@ const Home = () => {
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
+      return;
+    }
+
+    if (videoSize) {
       return;
     }
 
