@@ -26,7 +26,9 @@ export const About = forwardRef<AboutHandles>((props, ref) => {
         <Image src="/icons/close-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
       </button>
 
-      <h1 className={styles.title}>A little scanner app made with the web, you rebel scum!</h1>
+      <h1 className={styles.title}>Rebel Scan</h1>
+
+      <h2 className={styles.subtitle}>A little scanner app made with the web, you rebel scum!</h2>
 
       <div className={styles.social}>
         <a
