@@ -35,6 +35,7 @@ const Home = () => {
   const screenSize = useScreenSize();
 
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
+  const [videoHeight, setVideoHeight] = useState<string | undefined>(undefined);
   const canvasPadding: number = 64;
 
   useEffect(() => {
@@ -50,14 +51,26 @@ const Home = () => {
   }, [videoRef, scanRef, containerRef.current]);
 
   useEffect(() => {
-    setVideoLoaded(videoSize !== undefined);
-
     if (!videoSize) {
       return;
     }
 
     scan();
   }, [videoSize]);
+
+  useEffect(() => {
+    if (!videoSize || !containerRef?.current) {
+      return;
+    }
+
+    setVideoHeight(videoSize.width > videoSize.height ? '100%' : `${containerRef.current.offsetHeight + canvasPadding * 4}px`);
+
+    scan();
+  }, [videoSize, containerRef]);
+
+  useEffect(() => {
+    setVideoLoaded(videoHeight !== undefined);
+  }, [videoHeight]);
 
   useEffect(() => {
     setCanvasHeight(containerRef?.current?.offsetHeight ? containerRef.current.offsetHeight - canvasPadding : undefined);
@@ -222,10 +235,12 @@ const Home = () => {
     setStatus('share');
   };
 
+  const videoStyle = videoHeight ? ({'--video-height': `${videoHeight}`} as CSSProperties) : undefined;
+
   return (
     <main className={styles.main}>
       <article ref={containerRef} className={styles.container}>
-        <video className={styles.video} ref={videoRef}></video>
+        <video className={styles.video} ref={videoRef} style={videoStyle}></video>
 
         <div className={styles.overlay}></div>
 
