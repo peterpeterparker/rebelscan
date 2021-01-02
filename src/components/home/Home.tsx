@@ -149,11 +149,20 @@ const Home = () => {
       return;
     }
 
-    const y = videoSize.height - canvasPadding;
-    const x = (y * 210) / 297;
+    // We get landscape
+    let y: number = videoSize.height - canvasPadding;
+    let x: number = (y * 210) / 297;
 
-    const deltaX = (videoSize.width - x) / 2;
-    const deltaY = (videoSize.height - y) / 2;
+    const maxWidth: number = videoSize.width - canvasPadding;
+
+    if (x > maxWidth) {
+      // We might receive portrait and calculated width might be therefore bigger than effective video width.
+      x = maxWidth;
+      y = (x * 297) / 210;
+    }
+
+    const deltaX: number = (videoSize.width - x) / 2;
+    const deltaY: number = (videoSize.height - y) / 2;
 
     scanRef.current.width = 2100;
     scanRef.current.height = 2970;
