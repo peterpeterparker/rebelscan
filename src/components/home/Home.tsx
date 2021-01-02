@@ -100,7 +100,7 @@ const Home = () => {
       return;
     }
 
-    // TODO: flash
+    // If flash would be required
     // const capabilities = track.getCapabilities();
     //
     // if ((capabilities as any).torch) {
@@ -109,12 +109,9 @@ const Home = () => {
     //   });
     // }
 
-    console.log('getCapabilities', track.getCapabilities());
-
+    // To setup a special phone capabilities
     // const capabilities = track.getCapabilities();
     // if ((capabilities as any).iso) {
-    //   console.log('apply iso', (capabilities as any).focusDistance.max);
-    //
     //   await track.applyConstraints({
     //     advanced: [
     //       {
@@ -125,8 +122,6 @@ const Home = () => {
     // }
 
     const settings = track.getSettings();
-
-    console.log('settings', settings);
 
     const videoSize = {
       width: settings.width as number,
@@ -196,16 +191,16 @@ const Home = () => {
     if (status === 'scan') {
       await video.pause();
 
-      setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
       setStatus('capture');
+      setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
       return;
     }
 
     await video.play();
     scan();
 
-    setCaptureSrc(undefined);
     setStatus('scan');
+    setCaptureSrc(undefined);
   };
 
   const share = async () => {
