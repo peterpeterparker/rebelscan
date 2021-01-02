@@ -192,7 +192,6 @@ const Home = () => {
       await video.pause();
 
       setStatus('capture');
-      setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
       return;
     }
 
@@ -200,8 +199,16 @@ const Home = () => {
     scan();
 
     setStatus('scan');
-    setCaptureSrc(undefined);
   };
+
+  useEffect(() => {
+    if (status === 'capture') {
+      setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
+      return;
+    }
+
+    setCaptureSrc(undefined);
+  }, [status]);
 
   const share = async () => {
     if (!captureDest) {
