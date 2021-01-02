@@ -6,13 +6,14 @@ import styles from './Toolbar.module.scss';
 import {About, AboutHandles} from '../about/About';
 
 interface ToolbarProps {
+  videoLoaded: boolean;
   status: 'scan' | 'share';
   capture: () => void;
   share: () => void;
   download: () => void;
 }
 
-const Toolbar = ({capture, share, download, status}: ToolbarProps) => {
+const Toolbar = ({capture, share, download, status, videoLoaded}: ToolbarProps) => {
   // @ts-ignore
   const shareSupported: boolean = navigator.canShare;
 
@@ -29,7 +30,7 @@ const Toolbar = ({capture, share, download, status}: ToolbarProps) => {
           <Image src="/icons/information-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
 
-        <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture}>
+        <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture} disabled={!videoLoaded}>
           <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
 
@@ -43,14 +44,14 @@ const Toolbar = ({capture, share, download, status}: ToolbarProps) => {
   function renderShareOrDownload() {
     if (shareSupported) {
       return (
-        <button aria-label="Share" className={`${styles.action} share`} onClick={share} disabled={status === 'scan'}>
+        <button aria-label="Share" className={`${styles.action} share`} onClick={share} disabled={status === 'scan' || !videoLoaded}>
           <Image src="/icons/share-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
       );
     }
 
     return (
-      <button aria-label="Download" className={`${styles.action} share`} onClick={download} disabled={status === 'scan'}>
+      <button aria-label="Download" className={`${styles.action} share`} onClick={download} disabled={status === 'scan' || !videoLoaded}>
         <Image src="/icons/download-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
       </button>
     );

@@ -23,6 +23,8 @@ const Home = () => {
 
   const containerRef = useRef<HTMLElement | null>(null);
 
+  const [videoLoaded, setVideoLoaded] = useState<boolean>(true);
+
   const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
@@ -46,6 +48,10 @@ const Home = () => {
 
     scan();
   }, [canvasHeight, videoSize]);
+
+  useEffect(() => {
+    setVideoLoaded(canvasHeight !== undefined);
+  }, [canvasHeight]);
 
   const init = async () => {
     if (!videoRef?.current) {
@@ -203,7 +209,7 @@ const Home = () => {
         {renderCanvas()}
       </article>
 
-      <Toolbar status={status} download={download} capture={capture} share={share}></Toolbar>
+      <Toolbar videoLoaded={videoLoaded} status={status} download={download} capture={capture} share={share}></Toolbar>
     </main>
   );
 
@@ -221,7 +227,7 @@ const Home = () => {
         />
         <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' || canvasHeight === undefined ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
 
-        {canvasHeight === undefined ? <h1 className={styles.loading}>Loading...</h1> : undefined}
+        {!videoLoaded ? <h1 className={styles.loading}>Loading...</h1> : undefined}
       </>
     );
   }
