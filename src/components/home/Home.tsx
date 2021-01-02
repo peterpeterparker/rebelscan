@@ -65,8 +65,6 @@ const Home = () => {
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
-        width: {ideal: 1080},
-        height: {ideal: 1920},
         ...(isMobile() && {facingMode: {exact: 'environment'}}),
       },
     });
@@ -224,7 +222,7 @@ const Home = () => {
         <WebPhotoFilter
           onFilterLoad={($event: any) => imageLoaded($event)}
           src={captureSrc}
-          filter="desaturate,saturation,contrast"
+          filter="desaturate,saturation"
           className={`${styles.scan} ${styles.filter} ${status === 'scan' || canvasHeight === undefined ? 'hidden' : 'show'}`}
           style={canvasStyle}
         />
