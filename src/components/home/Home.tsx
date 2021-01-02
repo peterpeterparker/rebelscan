@@ -203,7 +203,8 @@ const Home = () => {
 
   useEffect(() => {
     if (status === 'capture') {
-      setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
+      // Delay render blocking action
+      setTimeout(() => setCaptureSrc(scanRef?.current?.toDataURL('image/png')), 250);
       return;
     }
 
