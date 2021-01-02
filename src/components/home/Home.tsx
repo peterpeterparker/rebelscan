@@ -65,6 +65,8 @@ const Home = () => {
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
       audio: false,
       video: {
+        width: {ideal: 3456},
+        height: {ideal: 4608},
         ...(isMobile() && {facingMode: {exact: 'environment'}}),
       },
     });
@@ -84,7 +86,11 @@ const Home = () => {
     //   });
     // }
 
+    console.log('getCapabilities', track.getCapabilities());
+
     const settings = track.getSettings();
+
+    console.log('settings', settings);
 
     const videoSize = {
       width: settings.width as number,
