@@ -63,7 +63,7 @@ const Home = () => {
       return;
     }
 
-    setVideoHeight(videoSize.width > videoSize.height ? '100%' : `${containerRef.current.offsetHeight + canvasPadding * 4}px`);
+    setVideoHeight(videoSize.width > videoSize.height ? '100%' : `${containerRef.current.offsetHeight + canvasPadding * 2}px`);
 
     scan();
   }, [videoSize, containerRef]);
