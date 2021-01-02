@@ -9,7 +9,7 @@ import {WebPhotoFilter} from 'web-photo-filter-react/dist';
 
 import styles from './Home.module.scss';
 
-import {InfoSize} from '../../hooks/size.hook';
+import {InfoSize, useScreenSize} from '../../hooks/size.hook';
 
 import {savePdf} from '../../utils/pdf.utils';
 import {shareImage} from '../../utils/image.utils';
@@ -26,12 +26,15 @@ const Home = () => {
   const [videoLoaded, setVideoLoaded] = useState<boolean>(false);
 
   const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
-  const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
   const [status, setStatus] = useState<'scan' | 'share' | 'capture'>('scan');
 
   const [captureSrc, setCaptureSrc] = useState<string | undefined>(undefined);
   const [captureDest, setCaptureDest] = useState<string | undefined>(undefined);
+
+  const screenSize = useScreenSize();
+
+  const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
@@ -46,16 +49,18 @@ const Home = () => {
   }, [videoRef, scanRef, containerRef.current]);
 
   useEffect(() => {
-    if (!videoSize || !canvasHeight) {
+    setVideoLoaded(videoSize !== undefined);
+
+    if (!videoSize) {
       return;
     }
 
     scan();
-  }, [canvasHeight, videoSize]);
+  }, [videoSize]);
 
   useEffect(() => {
-    setVideoLoaded(canvasHeight !== undefined);
-  }, [canvasHeight]);
+    setCanvasHeight(containerRef?.current?.offsetHeight);
+  }, [screenSize]);
 
   const init = async () => {
     if (!videoRef?.current) {
@@ -128,22 +133,6 @@ const Home = () => {
     await video.play();
 
     setVideoSize(videoSize);
-
-    initCanvasHeight(videoSize);
-  };
-
-  const initCanvasHeight = (videoSize: InfoSize) => {
-    if (!containerRef?.current) {
-      return;
-    }
-
-    const height = Math.min(containerRef?.current.offsetHeight, videoSize.height);
-
-    const width = (height * 210) / 297;
-
-    const canvasIdealHeight = (width > containerRef?.current.scrollWidth ? (containerRef?.current.scrollWidth / 210) * 297 : height) - 64;
-
-    setCanvasHeight(canvasIdealHeight > height ? height : canvasIdealHeight);
   };
 
   const streamFeed = () => {
@@ -155,11 +144,11 @@ const Home = () => {
       return;
     }
 
-    if (!videoSize || !canvasHeight) {
+    if (!videoSize) {
       return;
     }
 
-    const y = canvasHeight;
+    const y = videoSize.height;
     const x = (y * 210) / 297;
 
     const deltaX = (videoSize.width - x) / 2;
@@ -238,7 +227,7 @@ const Home = () => {
   );
 
   function renderCanvas() {
-    const canvasStyle = {'--canvas-height': `${canvasHeight}px`} as CSSProperties;
+    const canvasStyle = canvasHeight ? ({'--canvas-height': `${canvasHeight}px`} as CSSProperties) : undefined;
 
     return (
       <>
@@ -246,10 +235,10 @@ const Home = () => {
           onFilterLoad={($event: any) => imageLoaded($event)}
           src={captureSrc}
           filter="desaturate,saturation"
-          className={`${styles.scan} ${styles.filter} ${status === 'scan' || canvasHeight === undefined ? 'hidden' : 'show'}`}
+          className={`${styles.scan} ${styles.filter} ${status === 'scan' || videoSize === undefined ? 'hidden' : 'show'}`}
           style={canvasStyle}
         />
-        <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' || canvasHeight === undefined ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
+        <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' || videoSize === undefined ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
 
         {!videoLoaded ? <h1 className={styles.loading}>Loading...</h1> : undefined}
       </>
