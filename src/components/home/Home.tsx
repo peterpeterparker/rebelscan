@@ -259,7 +259,7 @@ const Home = () => {
         <WebPhotoFilter
           onFilterLoad={($event: any) => imageLoaded($event)}
           src={captureSrc}
-          filter="desaturate,saturation"
+          filter="desaturate,saturation,contrast"
           className={`${styles.scan} ${styles.filter} ${status === 'scan' || videoSize === undefined ? 'hidden' : 'show'}`}
           style={canvasStyle}
         />
