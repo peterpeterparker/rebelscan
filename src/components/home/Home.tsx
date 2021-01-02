@@ -94,7 +94,7 @@ const Home = () => {
 
     const capabilities = track.getCapabilities();
     if ((capabilities as any).iso) {
-      console.log('apply focus', (capabilities as any).focusDistance.max);
+      console.log('apply iso', (capabilities as any).focusDistance.max);
 
       await track.applyConstraints({
         advanced: [
