@@ -1,0 +1,34 @@
+.spinner {
+  animation: spin 2s ease-out infinite;
+
+  width: 36px;
+  height: 36px;
+
+  circle {
+    stroke: black;
+    stroke-linecap: round;
+    fill: none;
+    animation: progress 1s ease-out infinite;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes progress {
+  0% {
+    stroke-dasharray: 1, 150;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -35;
+  }
+  100% {
+    stroke-dasharray: 90, 150;
+    stroke-dashoffset: -100;
+  }
+}

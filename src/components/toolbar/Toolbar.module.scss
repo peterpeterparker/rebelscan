@@ -57,6 +57,12 @@
 
   transition: all 0.25s ease-in;
 
+  img {
+    user-select: none;
+    user-drag: none;
+    -webkit-user-drag: none;
+  }
+
   &:disabled {
     background: linear-gradient(135deg, var(--color-medium), var(--color-light));
     cursor: initial;

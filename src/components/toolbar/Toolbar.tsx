@@ -3,7 +3,9 @@ import {useRef} from 'react';
 import Image from 'next/image';
 
 import styles from './Toolbar.module.scss';
+
 import {About, AboutHandles} from '../about/About';
+import Spinner from '../spiner/Spinner';
 
 interface ToolbarProps {
   videoLoaded: boolean;
@@ -31,7 +33,7 @@ const Toolbar = ({capture, share, download, status, videoLoaded}: ToolbarProps) 
         </button>
 
         <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture} disabled={!videoLoaded || status === 'capture'}>
-          <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
+          {status === 'capture' ? <Spinner></Spinner> : <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />}
         </button>
 
         {renderShareOrDownload()}
