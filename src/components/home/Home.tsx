@@ -28,7 +28,7 @@ const Home = () => {
   const [videoSize, setVideoSize] = useState<InfoSize | undefined>(undefined);
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
 
-  const [status, setStatus] = useState<'scan' | 'share'>('scan');
+  const [status, setStatus] = useState<'scan' | 'share' | 'capture'>('scan');
 
   const [captureSrc, setCaptureSrc] = useState<string | undefined>(undefined);
   const [captureDest, setCaptureDest] = useState<string | undefined>(undefined);
@@ -162,6 +162,7 @@ const Home = () => {
       await video.pause();
 
       setCaptureSrc(scanRef?.current?.toDataURL('image/png'));
+      setStatus('capture');
       return;
     }
 
