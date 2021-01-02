@@ -1,7 +1,7 @@
 <div align="center">
   <a href="https://rebelscan.com"><img src="assets/logo.png" alt="Rebel Scan logo" height="160"></a>
 
-<br/><br/>
+  <br/>
 
   <p><strong>Rebel Scan</strong> - A little scanner app made with the web, you rebel scum!</p>
 
