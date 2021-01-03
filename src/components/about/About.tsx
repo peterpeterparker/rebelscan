@@ -20,6 +20,20 @@ export const About = forwardRef<AboutHandles>((props, ref) => {
     setOpen(true);
   };
 
+  const share = async ($event: React.MouseEvent<HTMLElement>) => {
+    $event.stopPropagation();
+
+    try {
+      await navigator.share({
+        title: 'Rebel Scan',
+        text: 'A little scanner app made with the web, you rebel scum!',
+        url: 'https://rebelscan.com',
+      });
+    } catch (err) {
+      console.error('Error while trying to share Rebel Scan', err);
+    }
+  };
+
   return (
     <div role="button" tabIndex={0} className={`${styles.menu} ${open ? `${styles.open}` : ''}`} onClick={() => hide()} onKeyDown={() => hide()}>
       <button aria-label="Close" className={styles.close}>
@@ -42,6 +56,10 @@ export const About = forwardRef<AboutHandles>((props, ref) => {
         <a onClick={($event) => $event.stopPropagation()} href="https://github.com/peterpeterparker/rebelscan" rel="noopener noreferrer" aria-label="GitHub">
           <img loading="lazy" src="/icons/logo-github.svg" aria-hidden="true" alt="" style={{width: '4rem', padding: '0.45rem'}} />
         </a>
+
+        <button onClick={share} aria-label="Share Rebel Scan">
+          <img loading="lazy" src="/icons/share-outline.svg" aria-hidden="true" alt="" style={{width: '4rem', padding: '0.45rem'}} />
+        </button>
       </div>
 
       <h2 className={styles.made}>
