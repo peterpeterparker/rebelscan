@@ -28,6 +28,8 @@
 
   height: var(--video-height);
   width: auto;
+
+  max-height: calc((100vw - (var(--canvas-padding) / 2)) / 210 * 297);
 }
 
 .overlay {
@@ -46,6 +48,9 @@
 
   width: calc(var(--canvas-height) * 210 / 297);
   height: var(--canvas-height);
+
+  max-width: calc(100vw - var(--canvas-padding));
+  max-height: calc((100vw - var(--canvas-padding)) / 210 * 297);
 
   transform: translate(-50%, -50%);
 

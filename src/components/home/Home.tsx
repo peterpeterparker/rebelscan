@@ -238,11 +238,12 @@ const Home = () => {
     setStatus('share');
   };
 
+  const containerStyle = {'--canvas-padding': `${canvasPadding}px`} as CSSProperties;
   const videoStyle = videoHeight ? ({'--video-height': `${videoHeight}`} as CSSProperties) : undefined;
 
   return (
     <main className={styles.main}>
-      <article ref={containerRef} className={styles.container}>
+      <article ref={containerRef} className={styles.container} style={containerStyle}>
         <video className={styles.video} ref={videoRef} style={videoStyle}></video>
 
         <div className={styles.overlay}></div>
