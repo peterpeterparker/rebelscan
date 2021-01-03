@@ -252,7 +252,7 @@ const Home = () => {
   return (
     <main className={styles.main}>
       <article ref={containerRef} className={styles.container}>
-        <video className={styles.video} ref={videoRef} style={videoStyle} muted={true} autoPlay={true}></video>
+        <video className={styles.video} ref={videoRef} style={videoStyle} muted={true} autoPlay={!iOS} playsInline={true}></video>
 
         <div className={styles.overlay}></div>
 
