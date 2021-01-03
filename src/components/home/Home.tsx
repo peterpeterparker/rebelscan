@@ -17,6 +17,8 @@ import Toolbar from '../toolbar/Toolbar';
 const Home = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  const startRef = useRef<HTMLButtonElement | null>(null);
+
   const scanRef = useRef<HTMLCanvasElement | null>(null);
 
   const containerRef = useRef<HTMLElement | null>(null);
@@ -37,7 +39,7 @@ const Home = () => {
   const canvasPadding: number = 64;
 
   useEffect(() => {
-    if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
+    if (!scanRef?.current || !videoRef?.current || !containerRef?.current || !startRef?.current) {
       return;
     }
 
@@ -45,8 +47,8 @@ const Home = () => {
       return;
     }
 
-    init();
-  }, [videoRef, scanRef, containerRef.current]);
+    startRef.current.click();
+  }, [videoRef, scanRef, containerRef, startRef]);
 
   useEffect(() => {
     if (!videoSize) {
@@ -251,6 +253,8 @@ const Home = () => {
       </article>
 
       <Toolbar videoLoaded={videoLoaded} status={status} download={download} capture={capture} share={share}></Toolbar>
+
+      <button role="button" style={{display: 'none'}} onClick={init} ref={startRef} aria-hidden={true}></button>
     </main>
   );
 
