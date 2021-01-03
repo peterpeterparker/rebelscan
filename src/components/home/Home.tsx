@@ -1,7 +1,5 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
 
-import {isMobile} from '@deckdeckgo/utils';
-
 import {defineCustomElements} from 'web-photo-filter/dist/loader';
 defineCustomElements();
 
@@ -90,7 +88,7 @@ const Home = () => {
       video: {
         width: {ideal: 1920},
         height: {ideal: 1080},
-        ...(isMobile() && {facingMode: {exact: 'environment'}}),
+        facingMode: 'environment',
       },
     });
 
