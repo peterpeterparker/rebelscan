@@ -2,6 +2,8 @@ import {useRef} from 'react';
 
 import Image from 'next/image';
 
+import {isIOS} from '@deckdeckgo/utils';
+
 import styles from './Toolbar.module.scss';
 
 import {About, AboutHandles} from '../about/About';
@@ -13,13 +15,16 @@ interface ToolbarProps {
   capture: () => void;
   share: () => void;
   download: () => void;
+  init: () => void;
 }
 
-const Toolbar = ({capture, share, download, status, videoLoaded}: ToolbarProps) => {
+const Toolbar = ({capture, share, download, status, videoLoaded, init}: ToolbarProps) => {
   // @ts-ignore
   const shareSupported: boolean = navigator.canShare;
 
   const aboutRef = useRef<AboutHandles>(null);
+
+  const iOS: boolean = isIOS();
 
   const openAbout = () => {
     aboutRef?.current?.display();
@@ -32,9 +37,9 @@ const Toolbar = ({capture, share, download, status, videoLoaded}: ToolbarProps) 
           <Image src="/icons/information-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
         </button>
 
-        <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture} disabled={!videoLoaded || status === 'capture'}>
-          {status === 'capture' ? <Spinner></Spinner> : <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />}
-        </button>
+        {renderStart()}
+
+        {renderScan()}
 
         {renderShareOrDownload()}
       </nav>
@@ -42,6 +47,30 @@ const Toolbar = ({capture, share, download, status, videoLoaded}: ToolbarProps) 
       <About ref={aboutRef}></About>
     </>
   );
+
+  function renderScan() {
+    if (iOS && !videoLoaded) {
+      return undefined;
+    }
+
+    return (
+      <button aria-label="Scan" className={`${styles.action} scan`} onClick={capture} disabled={!videoLoaded || status === 'capture'}>
+        {status === 'capture' ? <Spinner></Spinner> : <Image src="/icons/camera-outline.svg" alt="" aria-hidden={true} width={48} height={48} />}
+      </button>
+    );
+  }
+
+  function renderStart() {
+    if (!iOS || videoLoaded) {
+      return undefined;
+    }
+
+    return (
+      <button aria-label="Start" className={`${styles.action} scan`} onClick={init}>
+        <Image src="/icons/play-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
+      </button>
+    );
+  }
 
   function renderShareOrDownload() {
     if (shareSupported) {

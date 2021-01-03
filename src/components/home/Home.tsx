@@ -5,6 +5,8 @@ defineCustomElements();
 
 import {WebPhotoFilter} from 'web-photo-filter-react/dist';
 
+import {isIOS} from '@deckdeckgo/utils';
+
 import styles from './Home.module.scss';
 
 import {InfoSize, useScreenSize} from '../../hooks/size.hook';
@@ -36,12 +38,19 @@ const Home = () => {
   const [videoStyle, setVideoStyle] = useState<CSSProperties | undefined>(undefined);
   const canvasPadding: number = 64;
 
+  const iOS: boolean = isIOS();
+
   useEffect(() => {
     if (!scanRef?.current || !videoRef?.current || !containerRef?.current) {
       return;
     }
 
     if (videoSize) {
+      return;
+    }
+
+    // https://webkit.org/blog/6784/new-video-policies-for-ios/
+    if (iOS) {
       return;
     }
 
@@ -250,11 +259,7 @@ const Home = () => {
         {renderCanvas()}
       </article>
 
-      <Toolbar videoLoaded={videoLoaded} status={status} download={download} capture={capture} share={share}></Toolbar>
-
-      <button role="button" style={{display: 'none'}} onClick={init}>
-        iOS starter
-      </button>
+      <Toolbar videoLoaded={videoLoaded} status={status} download={download} capture={capture} share={share} init={init}></Toolbar>
     </main>
   );
 
@@ -277,7 +282,9 @@ const Home = () => {
         />
         <canvas ref={scanRef} className={`${styles.scan} ${status === 'share' || videoSize === undefined ? 'hidden' : 'show'}`} style={canvasStyle}></canvas>
 
-        {!videoLoaded ? <h1 className={styles.loading}>Loading...</h1> : undefined}
+        {!videoLoaded && !iOS ? <h1 className={styles.loading}>Loading...</h1> : undefined}
+
+        {!videoLoaded && iOS ? <h1 className={styles.loading}>Hit Play!</h1> : undefined}
       </>
     );
   }
