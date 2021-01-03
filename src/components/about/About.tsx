@@ -1,7 +1,10 @@
-import React, {forwardRef, Ref, useImperativeHandle, useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useState} from 'react';
+
+import Image from 'next/image';
 
 import styles from './About.module.scss';
-import Image from 'next/image';
+
+import config from '../../config.json';
 
 export interface AboutHandles {
   display(): void;
@@ -25,9 +28,9 @@ export const About = forwardRef<AboutHandles>((props, ref) => {
 
     try {
       await navigator.share({
-        title: 'Rebel Scan',
-        text: 'A little scanner app made with the web, you rebel scum!',
-        url: 'https://rebelscan.com',
+        title: config.title,
+        text: config.description,
+        url: config.url,
       });
     } catch (err) {
       console.error('Error while trying to share Rebel Scan', err);
@@ -40,9 +43,9 @@ export const About = forwardRef<AboutHandles>((props, ref) => {
         <Image src="/icons/close-outline.svg" alt="" aria-hidden={true} width={48} height={48} />
       </button>
 
-      <h1 className={styles.title}>Rebel Scan</h1>
+      <h1 className={styles.title}>{config.title}</h1>
 
-      <h2 className={styles.subtitle}>A little scanner app made with the web, you rebel scum!</h2>
+      <h2 className={styles.subtitle}>{config.description}</h2>
 
       <div className={styles.social}>
         <a
