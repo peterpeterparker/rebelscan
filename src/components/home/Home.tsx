@@ -33,7 +33,7 @@ const Home = () => {
   const screenSize = useScreenSize();
 
   const [canvasHeight, setCanvasHeight] = useState<number | undefined>(undefined);
-  const [videoHeight, setVideoHeight] = useState<string | undefined>(undefined);
+  const [videoStyle, setVideoStyle] = useState<CSSProperties | undefined>(undefined);
   const canvasPadding: number = 64;
 
   useEffect(() => {
@@ -61,14 +61,18 @@ const Home = () => {
       return;
     }
 
-    setVideoHeight(videoSize.width > videoSize.height ? '100%' : `${containerRef.current.offsetHeight + canvasPadding * 2}px`);
+    setVideoStyle({
+      '--video-height': videoSize.width > videoSize.height ? '100%' : `${containerRef.current.offsetHeight + canvasPadding * 2}px`,
+      '--video-max-height': videoSize.width > videoSize.height ? `calc((100vw - (${canvasPadding}px / 2)) / 210 * 297)` : 'inherit',
+      '--video-max-width': videoSize.width > videoSize.height ? 'inherit' : `calc(100vw - (${canvasPadding}px * (${videoSize.width} / ${videoSize.height})))`,
+    } as CSSProperties);
 
     scan();
   }, [videoSize, containerRef]);
 
   useEffect(() => {
-    setVideoLoaded(videoHeight !== undefined);
-  }, [videoHeight]);
+    setVideoLoaded(videoStyle !== undefined);
+  }, [videoStyle]);
 
   useEffect(() => {
     setCanvasHeight(containerRef?.current?.offsetHeight ? containerRef.current.offsetHeight - canvasPadding : undefined);
@@ -236,12 +240,9 @@ const Home = () => {
     setStatus('share');
   };
 
-  const containerStyle = {'--canvas-padding': `${canvasPadding}px`} as CSSProperties;
-  const videoStyle = videoHeight ? ({'--video-height': `${videoHeight}`} as CSSProperties) : undefined;
-
   return (
     <main className={styles.main}>
-      <article ref={containerRef} className={styles.container} style={containerStyle}>
+      <article ref={containerRef} className={styles.container}>
         <video className={styles.video} ref={videoRef} style={videoStyle}></video>
 
         <div className={styles.overlay}></div>
@@ -254,7 +255,12 @@ const Home = () => {
   );
 
   function renderCanvas() {
-    const canvasStyle = canvasHeight ? ({'--canvas-height': `${canvasHeight}px`} as CSSProperties) : undefined;
+    const canvasStyle = canvasHeight
+      ? ({
+          '--canvas-height': `${canvasHeight}px`,
+          '--canvas-padding': `${canvasPadding}px`,
+        } as CSSProperties)
+      : undefined;
 
     return (
       <>
