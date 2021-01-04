@@ -19,12 +19,12 @@ interface ToolbarProps {
 }
 
 const Toolbar = ({capture, share, download, status, videoLoaded, init}: ToolbarProps) => {
-  // @ts-ignore
-  const shareSupported: boolean = navigator.canShare;
-
   const aboutRef = useRef<AboutHandles>(null);
 
   const iOS: boolean = isIOS();
+
+  // @ts-ignore
+  const shareSupported: boolean = navigator.canShare && !iOS;
 
   const openAbout = () => {
     aboutRef?.current?.display();
