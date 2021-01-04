@@ -25,7 +25,7 @@
 
 Rebel Scan is a little, free and open source scanner application.
 
-It has been developed during Christmas holidays (2020) because I was looking to try and, learn new things web related. I documented these learnings in a [blog post].
+It has been developed during Christmas holidays (2020) because I was looking to try and, learn new things web related. I documented these learnings in a [blog post](https://dev.to/daviddalbusco/i-developed-a-little-scanner-web-app-at-christmas-to-learn-new-skills-3ghl).
 
 ## Features
 
